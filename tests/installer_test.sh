@@ -89,9 +89,16 @@ testUninstallerMustNotDeleteALinkThatDoesNotToSshunit2Command()
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }
 
-testInstallerShouldDisplayUsageUsingHFlag()
+testInstallerShouldDisplayUsageWhenUsingHFlag()
 {
     ${INSTALLER} -h >${FSTDOUT} 2>${FSTDERR}
+    assertNotNull "expects an usage output" "$(cat ${FSTDOUT})"
+    assertNull "no error message should be displayed but got: $(cat ${FSTDERR})" "$(cat ${FSTDERR})"
+}
+
+testInstallerShouldDisplayUsageWhenUsingWrongFlag()
+{
+    ${INSTALLER} -z >${FSTDOUT} 2>${FSTDERR}
     assertNotNull "expects an usage output" "$(cat ${FSTDOUT})"
     assertNull "no error message should be displayed but got: $(cat ${FSTDERR})" "$(cat ${FSTDERR})"
 }
