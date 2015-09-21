@@ -15,7 +15,7 @@ _this will create a link to the `shunit2-support/src/sshunit2` command in your `
 
 The command
 -----------
-### create a new project with shuni2 support enabled
+### create a new project with shunit2 support enabled
 run `sshunit2 -p /path/to/project`    
 ### generate a unit test file for a given command
 run `sshunit2 -t command_name`    
