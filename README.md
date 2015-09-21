@@ -22,5 +22,10 @@ run `sshunit2 -t command_name`
 
 > _Please note that the current directory must be your project directory_   
 
+### enable shunit2 support in an existing project directory
+run `sshunit2 -i`    
+
+> _Please note that the current directory must be your project directory_   
+
 ### display the help message
 run `sshunit2 -h`    

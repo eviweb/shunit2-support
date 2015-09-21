@@ -10,6 +10,7 @@ usage() {
     Options:
         -p path/to/project  initialize a project with shunit2 support enabled
         -t command_name     create a unit test file for command_name
+        -i                  enable shunit2 support in the current directory
         -h                  display this message
     shunit2 support command
 "
@@ -39,8 +40,7 @@ newProject()
     mkdir -p "${target_dir}/src"
     mkdir -p "${target_dir}/tests"
     cd "${target_dir}"
-    git init
-    git submodule add --name shunit2 https://github.com/kward/shunit2.git lib/shunit2
+    enableShunit2Support
 }
 
 newTest()
@@ -56,13 +56,20 @@ newTest()
     cat "${TPLDIR}/footer.tpl" >> "${test_file}"
 }
 
-OPTIONS=":hp:t:"
+enableShunit2Support()
+{
+    [ ! -e "$PWD/.git" ] && git init
+    git submodule add --name shunit2 https://github.com/kward/shunit2.git lib/shunit2
+}
+
+OPTIONS=":hip:t:"
 # get command line options
 while getopts $OPTIONS option
 do
     case $option in
         p) newProject "$OPTARG";;
         t) newTest "$OPTARG";;
+        i) enableShunit2Support;;
         *) usage && exit 1;;
     esac
 done

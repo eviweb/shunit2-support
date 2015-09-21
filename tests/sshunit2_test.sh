@@ -32,6 +32,29 @@ testSshunit2ShouldComplainIfATargetDirectoryAlreadyExists()
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }
 
+testSshunit2ShouldEnableShunit2SupportInANonGitDirectory()
+{
+    target_dir="${HOME}/myproject"
+    mkdir -p "${target_dir}"
+    cd "${target_dir}"
+    ${SSHUNIT2} -i >${FSTDOUT} 2>${FSTDERR}
+    assertTrue "git init was run" "[[ '$(cat ${FSTDOUT})' =~ '.git' ]]"
+    assertTrue "the project should contain the shunit2 library" "[ -e ${HOME}/myproject/lib/shunit2/source/2.1/src/shunit2 ]"
+    assertTrue "shunit2 is set as a submodule" "[ -e ${HOME}/myproject/.gitmodules ] && grep shunit2 ${HOME}/myproject/.gitmodules &> /dev/null"
+}
+
+testSshunit2ShouldEnableShunit2SupportInAGitDirectory()
+{
+    target_dir="${HOME}/myproject"
+    mkdir -p "${target_dir}"
+    cd "${target_dir}"
+    git init -q
+    ${SSHUNIT2} -i >${FSTDOUT} 2>${FSTDERR}
+    assertFalse "git init was not run" "[[ '$(cat ${FSTDOUT})' =~ '.git' ]]"
+    assertTrue "the project should contain the shunit2 library" "[ -e ${HOME}/myproject/lib/shunit2/source/2.1/src/shunit2 ]"
+    assertTrue "shunit2 is set as a submodule" "[ -e ${HOME}/myproject/.gitmodules ] && grep shunit2 ${HOME}/myproject/.gitmodules &> /dev/null"
+}
+
 testSshunit2ShouldCreateATestFile()
 {
     target_dir="${HOME}/myproject"
