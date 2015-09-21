@@ -1,1 +1,69 @@
 #! /bin/bash
+DIR=$(dirname $(readlink -f "$0"))
+TPLDIR="${DIR}/templates"
+
+# shunit2 support usage
+usage() {
+    echo "
+    Usage:
+        ./sshunit2 [OPTIONS]
+    Options:
+        -p path/to/project  initialize a project with shunit2 support enabled
+        -t command_name     create a unit test file for command_name
+        -h                  display this message
+    shunit2 support command
+"
+}
+
+checkTargetDirectory()
+{
+    if [ -e "$1" ]; then
+        echo "The target directory already exists" >&2
+        exit 1
+    fi
+}
+
+checkShunit2Support()
+{
+    if [ ! -e "$PWD/lib/shunit2/source/2.1/src/shunit2" ]; then
+        echo "Shunit2 support is not enabled in the current directory" >&2
+        exit 1
+    fi
+}
+
+newProject()
+{
+    local target_dir="$1"
+
+    checkTargetDirectory "$OPTARG"
+    mkdir -p "${target_dir}/src"
+    mkdir -p "${target_dir}/tests"
+    cd "${target_dir}"
+    git init
+    git submodule add --name shunit2 https://github.com/kward/shunit2.git lib/shunit2
+}
+
+newTest()
+{
+    local test_file="tests/$1_test.sh"
+
+    checkShunit2Support
+    if [ ! -e "tests" ]; then
+        mkdir "tests"
+    fi
+
+    cat "${TPLDIR}/header.tpl" > "${test_file}"
+    cat "${TPLDIR}/footer.tpl" >> "${test_file}"
+}
+
+OPTIONS=":hp:t:"
+# get command line options
+while getopts $OPTIONS option
+do
+    case $option in
+        p) newProject "$OPTARG";;
+        t) newTest "$OPTARG";;
+        *) usage && exit 1;;
+    esac
+done
+shift $(($OPTIND - 1 ))
