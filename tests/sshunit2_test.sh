@@ -89,6 +89,32 @@ testTheTestFileIsBuiltFromTemplates()
     assertTrue "the test file contains the footer part" "[[ '${test_file}' =~ '${footer}' ]]"
 }
 
+testSshunit2ShouldCreateATestSuite()
+{
+    suite=$(cat "${MAINDIR}/src/templates/suite.tpl")
+    target_dir="${HOME}/myproject"
+    mkdir -p "${target_dir}"
+    cd "${target_dir}"
+    ${SSHUNIT2} -s
+    suite_file="${target_dir}/tests/testsuite.sh"
+    assertTrue "the test suite was generated" "[ -e ${suite_file} ]"
+    assertTrue "the test suite is executable" "[ -x ${suite_file} ]"
+    assertTrue "the test suite is made using the suite template" "[[ '$(cat ${suite_file})' =~ '${suite}' ]]"
+}
+
+testSshunit2ShouldInformUserIfATestSuiteAlreadyExists()
+{
+    expected_message="A test suite runner already exists"
+    target_dir="${HOME}/myproject"
+    mkdir -p "${target_dir}/tests"
+    touch "${target_dir}/tests/testsuite.sh"
+    cd "${target_dir}"
+    ${SSHUNIT2} -s >${FSTDOUT} 2>${FSTDERR}
+    exit_code=$?
+    assertEquals "the script should exit with code 1" 1 ${exit_code}
+    assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
+}
+
 testSshunit2ShouldComplainIfTheCurrentDirectoryHasNotShunit2Enabled()
 {
     expected_message="Shunit2 support is not enabled in the current directory"

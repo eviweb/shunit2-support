@@ -11,15 +11,19 @@ usage() {
         -p path/to/project  initialize a project with shunit2 support enabled
         -t command_name     create a unit test file for command_name
         -i                  enable shunit2 support in the current directory
+        -s                  create a test suite runner in ./tests directory
         -h                  display this message
     shunit2 support command
 "
 }
 
-checkTargetDirectory()
+checkTarget()
 {
-    if [ -e "$1" ]; then
-        echo "The target directory already exists" >&2
+    local target="$1"
+    local message="$2"
+
+    if [ -e "${target}" ]; then
+        echo "${message}" >&2
         exit 1
     fi
 }
@@ -32,11 +36,20 @@ checkShunit2Support()
     fi
 }
 
+createDirectoryIfNotExist()
+{
+    local dir="$1"
+
+    if [ ! -e "${dir}" ]; then
+        mkdir -p "${dir}"
+    fi
+}
+
 newProject()
 {
     local target_dir="$1"
 
-    checkTargetDirectory "$OPTARG"
+    checkTarget "$OPTARG" "The target directory already exists"
     mkdir -p "${target_dir}/src"
     mkdir -p "${target_dir}/tests"
     cd "${target_dir}"
@@ -49,13 +62,23 @@ newTest()
     local dir=$(dirname "${test_file}")
 
     checkShunit2Support
-    if [ ! -e "${dir}" ]; then
-        mkdir -p "${dir}"
-    fi
+    createDirectoryIfNotExist "${dir}"
 
     cat "${TPLDIR}/header.tpl" > "${test_file}"
     cat "${TPLDIR}/footer.tpl" >> "${test_file}"
     chmod +x "${test_file}"
+}
+
+newTestSuite()
+{
+    local test_suite="tests/testsuite.sh"
+    local dir=$(dirname "${test_suite}")
+
+    checkTarget "${test_suite}" "A test suite runner already exists"
+    createDirectoryIfNotExist "${dir}"    
+
+    cat "${TPLDIR}/suite.tpl" > "${test_suite}"
+    chmod +x "${test_suite}"
 }
 
 enableShunit2Support()
@@ -64,14 +87,15 @@ enableShunit2Support()
     git submodule add --name shunit2 https://github.com/kward/shunit2.git lib/shunit2
 }
 
-OPTIONS=":hip:t:"
+OPTIONS=":hisp:t:"
 # get command line options
 while getopts $OPTIONS option
 do
     case $option in
         p) newProject "$OPTARG";;
         t) newTest "$OPTARG";;
-        i) enableShunit2Support;;
+        s) newTestSuite;;
+        i) enableShunit2Support;;        
         *) usage && exit 1;;
     esac
 done

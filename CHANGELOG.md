@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Added
 - test suite template
 - test files
+- sshunit2 now has a `-s` flag to create a test suite runner
 
 ### 0.1.0 - 2015-09-22
 #### Added
