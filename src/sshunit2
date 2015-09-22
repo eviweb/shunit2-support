@@ -46,10 +46,11 @@ newProject()
 newTest()
 {
     local test_file="tests/$1_test.sh"
+    local dir=$(dirname "${test_file}")
 
     checkShunit2Support
-    if [ ! -e "tests" ]; then
-        mkdir "tests"
+    if [ ! -e "${dir}" ]; then
+        mkdir -p "${dir}"
     fi
 
     cat "${TPLDIR}/header.tpl" > "${test_file}"

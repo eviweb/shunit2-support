@@ -64,6 +64,16 @@ testSshunit2ShouldCreateATestFile()
     assertTrue "the test file was generated" "[ -e ${target_dir}/tests/cmd_test.sh ]"
 }
 
+testSshunit2ShouldCreateATestFileInSubfolder()
+{
+    target_dir="${HOME}/myproject"
+    ${SSHUNIT2} -p "${target_dir}" &> /dev/null
+    cd "${target_dir}"
+    ${SSHUNIT2} -t "folder/cmd"
+    assertTrue "the subfolder was created" "[ -e ${target_dir}/tests/folder ]"
+    assertTrue "the test file was generated in the subfolder" "[ -e ${target_dir}/tests/folder/cmd_test.sh ]"
+}
+
 testTheTestFileIsBuiltFromTemplates()
 {
     header=$(cat "${MAINDIR}/src/templates/header.tpl")
