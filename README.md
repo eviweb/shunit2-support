@@ -29,3 +29,7 @@ run `sshunit2 -i`
 
 ### display the help message
 run `sshunit2 -h`    
+
+License
+-------
+please see [LICENSE](/LICENSE)
