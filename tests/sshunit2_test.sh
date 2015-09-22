@@ -62,6 +62,7 @@ testSshunit2ShouldCreateATestFile()
     cd "${target_dir}"
     ${SSHUNIT2} -t "cmd"
     assertTrue "the test file was generated" "[ -e ${target_dir}/tests/cmd_test.sh ]"
+    assertTrue "the test file is executable" "[ -x ${target_dir}/tests/cmd_test.sh ]"
 }
 
 testSshunit2ShouldCreateATestFileInSubfolder()

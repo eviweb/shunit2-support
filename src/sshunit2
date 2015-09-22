@@ -55,6 +55,7 @@ newTest()
 
     cat "${TPLDIR}/header.tpl" > "${test_file}"
     cat "${TPLDIR}/footer.tpl" >> "${test_file}"
+    chmod +x "${test_file}"
 }
 
 enableShunit2Support()
