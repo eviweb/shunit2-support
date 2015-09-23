@@ -2,6 +2,7 @@
 DIR=$(dirname $(readlink -f "$BASH_SOURCE"))
 MAINDIR=$(dirname "${DIR}")
 TPLDIR="${DIR}/templates"
+UPDDIR="${DIR}/updates"
 
 # shunit2 support usage
 usage() {
@@ -13,6 +14,7 @@ usage() {
         -t command_name     create a unit test file for command_name
         -i                  enable shunit2 support in the current directory
         -s                  create a test suite runner in ./tests directory
+        -U file_or_dir      update old unit test files with new version templates
         -h                  display this message
     shunit2 support command
 "
@@ -90,12 +92,89 @@ enableShunit2Support()
     git submodule add --name shunit2 https://github.com/kward/shunit2.git lib/shunit2
 }
 
+updateTests()
+{
+    local files=()
+
+    if [ -f "$1" ]; then
+        files=( "$1" )
+    else
+        files=( $(find $1 -type f \( -iname "*_test.sh" ! -path "*/fixtures/*" \)) )
+    fi
+
+    for upd in ${UPDDIR}/*; do
+        . ${upd}
+        for file in ${files[@]}; do
+            local curversion="$(currentVersion)"
+            local oldversion="$(getVersionFromFile ${file})"
+
+            if [ $(compareVersion "${curversion}" "${oldversion}") -eq 1 ]; then
+                update "${file}"
+            fi
+        done
+    done
+}
+
+updateTestSuite()
+{
+    local file="$1"
+    
+    if [ -d "$1" ]; then
+        file="$(find $1 -type f \( -iname "testsuite.sh" ! -path "*/fixtures/*" \))"
+    fi
+
+    if [ -e "${file}" ]; then
+        local curversion="$(currentVersion)"
+        local oldversion="$(getVersionFromFile ${file})"
+
+        if [ $(compareVersion "${curversion}" "${oldversion}") -eq 1 ]; then
+            unlink "${file}"
+            newTestSuite
+        fi
+    fi
+}
+
+doUpdate()
+{
+    if [ -d "$1" ]; then
+        updateTests "$1"
+        updateTestSuite "$1"
+    elif echo "$1" | grep "_test.sh" > /dev/null; then
+        updateTests "$1"
+    elif echo "$1" | grep "testsuite.sh" > /dev/null; then
+        updateTestSuite "$1"
+    fi
+}
+
 tagWithVersion()
 {
     echo "# version: $(cat ${MAINDIR}/VERSION)" >> "$1"
 }
 
-OPTIONS=":hisp:t:"
+compareVersion()
+{
+    local curversion="$1"
+    local oldversion="$2"
+    [ -z "${oldversion}" ] && oldversion="0.1.0"
+    export VERSION_FILE="${MAINDIR}/VERSION"
+
+    ${MAINDIR}/lib/semver-tool/src/semver compare "${curversion}" "${oldversion}"
+}
+
+currentVersion()
+{
+    cat "${MAINDIR}/VERSION"
+}
+
+getVersionFromFile()
+{
+    local file="$1"
+    local pattern="\d+\.\d+\.\d+\-*.*"
+
+    grep -Poe "# version: ${pattern}" ${file} | grep -Poe "${pattern}"
+}
+
+OPTIONS=":hisp:t:U:"
 # get command line options
 while getopts $OPTIONS option
 do
@@ -104,6 +183,7 @@ do
         t) newTest "$OPTARG";;
         s) newTestSuite;;
         i) enableShunit2Support;;
+        U) doUpdate "$OPTARG";;
         *) usage && exit 1;;
     esac
 done

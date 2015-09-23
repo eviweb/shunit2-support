@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Added
 - a set of support functions in the header template
 - generated test files and test suite are tagged with the current version
+- test file and test suite updater
 
 ### 0.1.1 - 2015-09-22
 #### Added
