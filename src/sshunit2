@@ -1,5 +1,6 @@
 #! /bin/bash
 DIR=$(dirname $(readlink -f "$BASH_SOURCE"))
+MAINDIR=$(dirname "${DIR}")
 TPLDIR="${DIR}/templates"
 
 # shunit2 support usage
@@ -66,6 +67,7 @@ newTest()
 
     cat "${TPLDIR}/header.tpl" > "${test_file}"
     cat "${TPLDIR}/footer.tpl" >> "${test_file}"
+    tagWithVersion "${test_file}"
     chmod +x "${test_file}"
 }
 
@@ -78,6 +80,7 @@ newTestSuite()
     createDirectoryIfNotExist "${dir}"    
 
     cat "${TPLDIR}/suite.tpl" > "${test_suite}"
+    tagWithVersion "${test_suite}"
     chmod +x "${test_suite}"
 }
 
@@ -85,6 +88,11 @@ enableShunit2Support()
 {
     [ ! -e "$PWD/.git" ] && git init
     git submodule add --name shunit2 https://github.com/kward/shunit2.git lib/shunit2
+}
+
+tagWithVersion()
+{
+    echo "# version: $(cat ${MAINDIR}/VERSION)" >> "$1"
 }
 
 OPTIONS=":hisp:t:"
@@ -95,7 +103,7 @@ do
         p) newProject "$OPTARG";;
         t) newTest "$OPTARG";;
         s) newTestSuite;;
-        i) enableShunit2Support;;        
+        i) enableShunit2Support;;
         *) usage && exit 1;;
     esac
 done

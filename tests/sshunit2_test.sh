@@ -115,6 +115,26 @@ testSshunit2ShouldInformUserIfATestSuiteAlreadyExists()
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }
 
+testSshunit2ShouldTagTestFilesWithCurrentVersion()
+{
+    target_dir="${HOME}/myproject"
+    ${SSHUNIT2} -p "${target_dir}" &> /dev/null
+    cd "${target_dir}"
+    ${SSHUNIT2} -t "cmd"
+    version="$(cat ${MAINDIR}/VERSION)"
+    assertTrue "test file is tagged with current version" "grep '# version: ${version}' ${target_dir}/tests/cmd_test.sh"
+}
+
+testSshunit2ShouldTagTestSuiteWithCurrentVersion()
+{
+    target_dir="${HOME}/myproject"
+    ${SSHUNIT2} -p "${target_dir}" &> /dev/null
+    cd "${target_dir}"
+    ${SSHUNIT2} -s
+    version="$(cat ${MAINDIR}/VERSION)"
+    assertTrue "test suite is tagged with current version" "grep '# version: ${version}' ${target_dir}/tests/testsuite.sh"
+}
+
 testSshunit2ShouldComplainIfTheCurrentDirectoryHasNotShunit2Enabled()
 {
     expected_message="Shunit2 support is not enabled in the current directory"
