@@ -2,3 +2,7 @@
 	path = lib/shunit2
 	url = https://github.com/kward/shunit2.git
 	branch = master
+[submodule "semver-tool"]
+	path = lib/semver-tool
+	url = https://github.com/eviweb/semver-tool.git
+    branch = develop
