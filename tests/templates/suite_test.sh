@@ -86,6 +86,13 @@ testSuiteShouldCollectFailingTestFile()
     assertTrue "test3 should be listed" "[[ '${error}' =~ 'test3_test.sh' ]]"
 }
 
+testSuiteShouldExcludeFixtureFiles()
+{
+    fixtures=$(newFailureTest "fixtures/fake")
+    runTestSuite
+    assertTrue "fixtures should not be run" "[[ '$(cat ${FSTDOUT})' =~ 'Test Suite PASSED' ]] && ! [[ '$(cat ${FSTDERR})' =~ 'fake_test.sh' ]]"
+}
+
 
 ###### Setup / Teardown #####
 oneTimeSetUp()

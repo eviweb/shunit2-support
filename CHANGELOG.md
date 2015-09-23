@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 #### Changed
 - rely on $BASH_SOURCE instead of $0 in most of the scripts
+- test suite runner now excludes directories named fixtures from test file gathering
 
 #### Added
 - a set of support functions in the header template
