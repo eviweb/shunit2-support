@@ -122,7 +122,7 @@ testSshunit2ShouldTagTestFilesWithCurrentVersion()
     cd "${target_dir}"
     ${SSHUNIT2} -t "cmd"
     version="$(cat ${MAINDIR}/VERSION)"
-    assertTrue "test file is tagged with current version" "grep '# version: ${version}' ${target_dir}/tests/cmd_test.sh"
+    assertTrue "test file is tagged with current version" "grep -Poe '^# version: ${version}' ${target_dir}/tests/cmd_test.sh"
 }
 
 testSshunit2ShouldTagTestSuiteWithCurrentVersion()
@@ -132,7 +132,7 @@ testSshunit2ShouldTagTestSuiteWithCurrentVersion()
     cd "${target_dir}"
     ${SSHUNIT2} -s
     version="$(cat ${MAINDIR}/VERSION)"
-    assertTrue "test suite is tagged with current version" "grep '# version: ${version}' ${target_dir}/tests/testsuite.sh"
+    assertTrue "test suite is tagged with current version" "grep -Poe '^# version: ${version}' ${target_dir}/tests/testsuite.sh"
 }
 
 testSshunit2ShouldComplainIfTheCurrentDirectoryHasNotShunit2Enabled()

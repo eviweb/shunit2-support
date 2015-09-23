@@ -148,7 +148,7 @@ doUpdate()
 
 tagWithVersion()
 {
-    echo "# version: $(cat ${MAINDIR}/VERSION)" >> "$1"
+    echo -e "\n# version: $(cat ${MAINDIR}/VERSION)" >> "$1"
 }
 
 compareVersion()
