@@ -6,6 +6,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Removed
 - the provided $DIR variable from header template
 
+#### Changed
+- rely on $BASH_SOURCE instead of $0 in most of the scripts
+
 #### Added
 - a set of support functions in the header template
 

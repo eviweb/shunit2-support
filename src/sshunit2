@@ -1,5 +1,5 @@
 #! /bin/bash
-DIR=$(dirname $(readlink -f "$0"))
+DIR=$(dirname $(readlink -f "$BASH_SOURCE"))
 TPLDIR="${DIR}/templates"
 
 # shunit2 support usage

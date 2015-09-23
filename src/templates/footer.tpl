@@ -20,7 +20,7 @@ exitOnError()
     exit $1
 }
 #
-path=$(findShunit2 "$0")
+path=$(findShunit2 "$BASH_SOURCE")
 code=$?
 if [ ${code} -ne 0 ]; then
     exitOnError ${code} "${path}"

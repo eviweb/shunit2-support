@@ -1,5 +1,5 @@
 #! /bin/bash
-TESTDIR=$(dirname $(readlink -f "$0"))
+TESTDIR=$(dirname $(readlink -f "$BASH_SOURCE"))
 MAINDIR=$(dirname "${TESTDIR}")
 INSTALLER="${MAINDIR}/install.sh"
 SHUNIT2="${MAINDIR}/lib/shunit2/source/2.1/src/shunit2"
