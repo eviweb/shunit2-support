@@ -95,6 +95,7 @@ enableShunit2Support()
 updateTests()
 {
     local files=()
+    local curversion="$(currentVersion)"
 
     if [ -f "$1" ]; then
         files=( "$1" )
@@ -102,17 +103,18 @@ updateTests()
         files=( $(find $1 -type f \( -iname "*_test.sh" ! -path "*/fixtures/*" \)) )
     fi
 
-    for upd in ${UPDDIR}/*; do
-        . ${upd}
-        for file in ${files[@]}; do
-            local curversion="$(currentVersion)"
-            local oldversion="$(getVersionFromFile ${file})"
+    for file in ${files[@]}; do        
+        local oldversion="$(getVersionFromFile ${file})"
 
-            if [ $(compareVersion "${curversion}" "${oldversion}") -eq 1 ]; then
+        if [ $(compareVersion "${curversion}" "${oldversion}") -eq 1 ]; then
+            for upd in ${UPDDIR}/*; do
+                . ${upd}
                 update "${file}"
-            fi
-        done
+            done
+            tagWithVersion "${file}"
+        fi
     done
+    
 }
 
 updateTestSuite()

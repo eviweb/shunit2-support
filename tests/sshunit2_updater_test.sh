@@ -21,6 +21,17 @@ testSshunit2ShouldApplyUpdatesToAnOldTestFile()
     assertNotSame "the two files should be different" "$(cat ${TESTDIR}/fixtures/simple_test.sh)" "$(cat ${maindir}/tests/simple_test.sh)"
 }
 
+testSshunit2ShouldTagAnUpdatedTestFileWithCurrentVersion()
+{
+    local maindir="${HOME}/myproject"
+
+    ${SSHUNIT2} -p "${maindir}" &> /dev/null
+    cp "${TESTDIR}/fixtures/simple_test.sh" "${maindir}/tests"
+    ${SSHUNIT2} -U "${maindir}/tests/simple_test.sh"
+    version="$(cat ${MAINDIR}/VERSION)"
+    assertTrue "test file is tagged with current version" "grep -Poe '^# version: ${version}' ${maindir}/tests/simple_test.sh"
+}
+
 testSshunit2ShouldApplyUpdatesToManyOldTestFilesFromAGivenDirectory()
 {
     local maindir="${HOME}/myproject"
@@ -60,6 +71,19 @@ testSshunit2ShouldUpdateAnOldTestSuite()
     cp "${oldtestsuite}" "${maindir}/tests/testsuite.sh"
     ${SSHUNIT2} -U "${maindir}/tests/testsuite.sh"
     assertNotSame "the two files should be different" "$(cat ${oldtestsuite})" "$(cat ${maindir}/tests/testsuite.sh)"
+}
+
+testSshunit2ShouldTagAnUpdatedTestSuiteWithCurrentVersion()
+{
+    local maindir="${HOME}/myproject"
+    local oldtestsuite="${TESTDIR}/fixtures/oldtestsuite.sh"
+
+    ${SSHUNIT2} -p "${maindir}" &> /dev/null
+    cd "${maindir}"
+    cp "${oldtestsuite}" "${maindir}/tests/testsuite.sh"
+    ${SSHUNIT2} -U "${maindir}/tests/testsuite.sh"
+    version="$(cat ${MAINDIR}/VERSION)"
+    assertTrue "test file is tagged with current version" "grep -Poe '^# version: ${version}' ${maindir}/tests/testsuite.sh"
 }
 
 ###### Setup / Teardown #####
