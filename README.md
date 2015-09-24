@@ -30,7 +30,7 @@ run `sshunit2 -i`
 ### generate a test suite runner under _./tests_ directory
 run `sshunit2 -s`    
 
-### update old unit test files with new version templates
+### update old unit test and test suite files with new version templates
 run `sshunit2 -U file_or_dir`    
 
 ### display the help message
