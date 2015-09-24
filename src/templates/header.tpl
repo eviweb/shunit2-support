@@ -37,7 +37,7 @@ srcdir()
 }
 
 # get the path of the test directory
-testdir()
+qatestdir()
 {
     echo "$(maindir)/tests"
 }
