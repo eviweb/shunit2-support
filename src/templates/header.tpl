@@ -48,7 +48,4 @@ libdir()
     echo "$(maindir)/lib"
 }
 
-################ Unit tests ################
-
-
-
+############## End Utilities ###############
