@@ -97,9 +97,9 @@ testHeaderTestDirFunctionShouldReturnTheRealPathOfTheTestDirectory()
 
     ${SSHUNIT2} -p "${maindir}" &> /dev/null
     cat ${HEADER} > ${maindir}/tests/test.sh && chmod +x ${maindir}/tests/test.sh
-    echo "echo \$(testdir)" >> ${maindir}/tests/test.sh
+    echo "echo \$(qatestdir)" >> ${maindir}/tests/test.sh
     ${maindir}/tests/test.sh >${FSTDOUT} 2>${FSTDERR}
-    assertSame "testdir() returns the test directory" "${maindir}/tests" "$(cat ${FSTDOUT})"
+    assertSame "qatestdir() returns the test directory" "${maindir}/tests" "$(cat ${FSTDOUT})"
 }
 
 testHeaderLibDirFunctionShouldReturnTheRealPathOfTheMainLibDirectory()
