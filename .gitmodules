@@ -5,4 +5,4 @@
 [submodule "semver-tool"]
 	path = lib/semver-tool
 	url = https://github.com/fsaintjacques/semver-tool.git
-    branch = develop
+    branch = master
