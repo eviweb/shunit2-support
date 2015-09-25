@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### [Unreleased][unreleased]
 
+### 0.2.1 - 2015-09-25
 #### Added
 - new `-l` option to create library files under ./src
 - new `-c` option to create command files under ./src
