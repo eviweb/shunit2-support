@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### [Unreleased][unreleased]
 
+#### Added
+- new `-l` option to create library files under ./src
+
+
 ### 0.2.0 - 2015-09-24
 #### Removed
 - the provided $DIR variable from header template

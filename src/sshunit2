@@ -14,6 +14,7 @@ usage() {
         -t command_name     create a unit test file for command_name
         -i                  enable shunit2 support in the current directory
         -s                  create a test suite runner in ./tests directory
+        -l filename         create a library file relatively under ./src
         -U file_or_dir      update old unit test files with new version templates
         -h                  display this message
     shunit2 support command
@@ -84,6 +85,18 @@ newTestSuite()
     cat "${TPLDIR}/suite.tpl" > "${test_suite}"
     tagWithVersion "${test_suite}"
     chmod +x "${test_suite}"
+}
+
+newLib()
+{
+    local file="src/${1%.*}.sh"
+    local dir="${file%/*}"
+
+    if [ ! -e "${dir}" ]; then
+        mkdir -p "${dir}"
+    fi
+
+    touch "${file}"
 }
 
 enableShunit2Support()
@@ -176,7 +189,7 @@ getVersionFromFile()
     grep -Poe "# version: ${pattern}" ${file} | grep -Poe "${pattern}"
 }
 
-OPTIONS=":hisp:t:U:"
+OPTIONS=":hisp:t:U:l:"
 # get command line options
 while getopts $OPTIONS option
 do
@@ -184,6 +197,7 @@ do
         p) newProject "$OPTARG";;
         t) newTest "$OPTARG";;
         s) newTestSuite;;
+        l) newLib "$OPTARG";;
         i) enableShunit2Support;;
         U) doUpdate "$OPTARG";;
         *) usage && exit 1;;
