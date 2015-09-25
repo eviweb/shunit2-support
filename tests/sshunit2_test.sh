@@ -95,6 +95,17 @@ testSshunit2ShouldCreateACommandFile()
     assertTrue "the test file is executable" "[ -x ${target_dir}/src/folder/mycmd.sh ]"
 }
 
+testEnsureGeneratedCommandAndLibFilesGetTheBashShebang()
+{
+    target_dir="${HOME}/myproject"
+    ${SSHUNIT2} -p "${target_dir}" &> /dev/null
+    cd "${target_dir}"
+    ${SSHUNIT2} -l "mylib"
+    ${SSHUNIT2} -c "mycmd"
+    assertTrue "the library file has the bash shebang" "grep '#! /bin/bash' ${target_dir}/src/mylib.sh"
+    assertTrue "the command file has the bash shebang" "grep '#! /bin/bash' ${target_dir}/src/mycmd.sh"
+}
+
 testTheTestFileIsBuiltFromTemplates()
 {
     header=$(cat "${MAINDIR}/src/templates/header.tpl")
