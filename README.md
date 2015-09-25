@@ -27,6 +27,11 @@ run `sshunit2 -i`
 
 > _Please note that the current directory must be your project directory_   
 
+### create a command file relatively under ./src
+run `sshunit2 -c filename`    
+
+> _Please note that the current directory must be your project directory_    
+
 ### create a library file relatively under ./src
 run `sshunit2 -l filename`    
 

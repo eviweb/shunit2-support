@@ -85,6 +85,16 @@ testSshunit2ShouldCreateALibFile()
     assertFalse "the test file is not executable" "[ -x ${target_dir}/src/folder/mylib.sh ]"
 }
 
+testSshunit2ShouldCreateACommandFile()
+{
+    target_dir="${HOME}/myproject"
+    ${SSHUNIT2} -p "${target_dir}" &> /dev/null
+    cd "${target_dir}"
+    ${SSHUNIT2} -c "folder/mycmd"
+    assertTrue "the library file was generated" "[ -e ${target_dir}/src/folder/mycmd.sh ]"
+    assertTrue "the test file is executable" "[ -x ${target_dir}/src/folder/mycmd.sh ]"
+}
+
 testTheTestFileIsBuiltFromTemplates()
 {
     header=$(cat "${MAINDIR}/src/templates/header.tpl")
