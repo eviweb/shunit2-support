@@ -106,6 +106,32 @@ testEnsureGeneratedCommandAndLibFilesGetTheBashShebang()
     assertTrue "the command file has the bash shebang" "grep '#! /bin/bash' ${target_dir}/src/mycmd.sh"
 }
 
+testSshunit2ShouldDieIfALibFileAlreadyExists()
+{
+    expected_message="The file already exists, abort."
+    target_dir="${HOME}/myproject"
+    ${SSHUNIT2} -p "${target_dir}" &> /dev/null
+    cd "${target_dir}"
+    touch "src/mylib.sh"
+    ${SSHUNIT2} -l "mylib" >${FSTDOUT} 2>${FSTDERR}
+    exit_code=$?
+    assertFalse "the script should exit with code 1" ${exit_code}
+    assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
+}
+
+testSshunit2ShouldDieIfACommandFileAlreadyExists()
+{
+    expected_message="The file already exists, abort."
+    target_dir="${HOME}/myproject"
+    ${SSHUNIT2} -p "${target_dir}" &> /dev/null
+    cd "${target_dir}"
+    touch "src/mycmd.sh"
+    ${SSHUNIT2} -l "mycmd" >${FSTDOUT} 2>${FSTDERR}
+    exit_code=$?
+    assertFalse "the script should exit with code 1" ${exit_code}
+    assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
+}
+
 testTheTestFileIsBuiltFromTemplates()
 {
     header=$(cat "${MAINDIR}/src/templates/header.tpl")

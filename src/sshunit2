@@ -102,6 +102,11 @@ newLib()
         mkdir -p "${dir}"
     fi
 
+    if [ -e "${file}" ]; then
+        echo "The file already exists, abort." >&2
+        exit 1
+    fi
+
     echo -e "#! /bin/bash\n" > "${file}"
 }
 
