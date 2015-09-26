@@ -49,9 +49,7 @@ testFooterTemplateFindShunit2ShouldThrowAnErrorIfShunit2LibraryIsNotFound()
     mkdir -p "${test_dir}"
     cd "${project_dir}"    
     cat ${FOOTER} > "${test_file}" && chmod +x "${test_file}"
-#    sed -i "s/^.*source\/2.1\/src\/shunit2/echo \$path/" "${test_file}"
     "${test_file}" >${FSTDOUT} 2>${FSTDERR}
-#    echo "$(cat ${FSTDOUT})"
     local exit_code=$?
     assertNotEquals "the script should exit with code other than 0, got: ${exit_code}" 0 ${exit_code}
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
