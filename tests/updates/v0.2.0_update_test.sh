@@ -15,28 +15,28 @@ fi
 ########### Tests ###########
 testV020UpdateShouldInsertLastHeaderAtTheTopOfAnOldTestFile()
 {
-    local maindir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     local header="$(cat ${HEADER})"
     local nlines=$(echo "${header}" | wc -l)
 
-    ${SSHUNIT2} -p "${maindir}" &> /dev/null
-    cp "${TESTDIR}/fixtures/simple_test.sh" "${maindir}/tests"
-    ${SSHUNIT2} -U "${maindir}/tests/simple_test.sh"
-    assertSame "the header template should be inserted at the top of the old test file" "$(cat ${HEADER})" "$(head -n ${nlines} ${maindir}/tests/simple_test.sh)"
+    fakeProjectDir "${project_dir}"
+    cp "${TESTDIR}/fixtures/simple_test.sh" "${project_dir}/tests"
+    ${SSHUNIT2} -U "${project_dir}/tests/simple_test.sh"
+    assertSame "the header template should be inserted at the top of the old test file" "$(cat ${HEADER})" "$(head -n ${nlines} ${project_dir}/tests/simple_test.sh)"
 }
 
 testV020UpdateShouldFixDirVariableOfAnOldTestFile()
 {
-    local maindir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     local oldpattern='DIR=$(dirname $(readlink -f "$0"))'
     local newpattern='DIR="$(mydir)"'
 
-    ${SSHUNIT2} -p "${maindir}" &> /dev/null
-    cp "${TESTDIR}/fixtures/simple_test.sh" "${maindir}/tests"
-    ${SSHUNIT2} -U "${maindir}/tests/simple_test.sh"
-    grep "${oldpattern}" ${maindir}/tests/simple_test.sh >${FSTDOUT}
+    fakeProjectDir "${project_dir}"
+    cp "${TESTDIR}/fixtures/simple_test.sh" "${project_dir}/tests"
+    ${SSHUNIT2} -U "${project_dir}/tests/simple_test.sh"
+    grep "${oldpattern}" ${project_dir}/tests/simple_test.sh >${FSTDOUT}
     assertNull "the DIR variable should have changed" "$(cat ${FSTDOUT})"
-    assertSame "the DIR variable should now use mydir function" "${newpattern}" "$(grep ${newpattern} ${maindir}/tests/simple_test.sh)"
+    assertSame "the DIR variable should now use mydir function" "${newpattern}" "$(grep ${newpattern} ${project_dir}/tests/simple_test.sh)"
 }
 
 ###### Setup / Teardown #####

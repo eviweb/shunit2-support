@@ -66,51 +66,51 @@ testHeaderMyDirFunctionShouldReturnTheRealPathOfItsHostFileWhenSourced()
 
 testHeaderMainDirFunctionShouldReturnTheRealPathOfTheProjectDirectory()
 {
-    local maindir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
 
-    ${SSHUNIT2} -p "${maindir}" &> /dev/null
-    mkdir -p "${maindir}/tests/folder"
-    cat ${HEADER} > ${maindir}/tests/test.sh && chmod +x ${maindir}/tests/test.sh
-    cat ${HEADER} > ${maindir}/tests/folder/test.sh && chmod +x ${maindir}/tests/folder/test.sh
-    echo "echo \$(maindir)" >> ${maindir}/tests/test.sh
-    echo "echo \$(maindir)" >> ${maindir}/tests/folder/test.sh
-    ${maindir}/tests/test.sh >${FSTDOUT} 2>${FSTDERR}
-    assertSame "maindir() returns the main directory" "${maindir}" "$(cat ${FSTDOUT})"
-    ${maindir}/tests/folder/test.sh >${FSTDOUT} 2>${FSTDERR}
-    assertSame "maindir() returns the main directory" "${maindir}" "$(cat ${FSTDOUT})"
+    fakeProjectDir "${project_dir}"
+    mkdir -p "${project_dir}/tests/folder"
+    cat ${HEADER} > ${project_dir}/tests/test.sh && chmod +x ${project_dir}/tests/test.sh
+    cat ${HEADER} > ${project_dir}/tests/folder/test.sh && chmod +x ${project_dir}/tests/folder/test.sh
+    echo "echo \$(maindir)" >> ${project_dir}/tests/test.sh
+    echo "echo \$(maindir)" >> ${project_dir}/tests/folder/test.sh
+    ${project_dir}/tests/test.sh >${FSTDOUT} 2>${FSTDERR}
+    assertSame "maindir() returns the main directory" "${project_dir}" "$(cat ${FSTDOUT})"
+    ${project_dir}/tests/folder/test.sh >${FSTDOUT} 2>${FSTDERR}
+    assertSame "maindir() returns the main directory" "${project_dir}" "$(cat ${FSTDOUT})"
 }
 
 testHeaderSrcDirFunctionShouldReturnTheRealPathOfTheSourceDirectory()
 {
-    local maindir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
 
-    ${SSHUNIT2} -p "${maindir}" &> /dev/null
-    cat ${HEADER} > ${maindir}/tests/test.sh && chmod +x ${maindir}/tests/test.sh
-    echo "echo \$(srcdir)" >> ${maindir}/tests/test.sh
-    ${maindir}/tests/test.sh >${FSTDOUT} 2>${FSTDERR}
-    assertSame "srcdir() returns the source directory" "${maindir}/src" "$(cat ${FSTDOUT})"
+    fakeProjectDir "${project_dir}"
+    cat ${HEADER} > ${project_dir}/tests/test.sh && chmod +x ${project_dir}/tests/test.sh
+    echo "echo \$(srcdir)" >> ${project_dir}/tests/test.sh
+    ${project_dir}/tests/test.sh >${FSTDOUT} 2>${FSTDERR}
+    assertSame "srcdir() returns the source directory" "${project_dir}/src" "$(cat ${FSTDOUT})"
 }
 
 testHeaderTestDirFunctionShouldReturnTheRealPathOfTheTestDirectory()
 {
-    local maindir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
 
-    ${SSHUNIT2} -p "${maindir}" &> /dev/null
-    cat ${HEADER} > ${maindir}/tests/test.sh && chmod +x ${maindir}/tests/test.sh
-    echo "echo \$(qatestdir)" >> ${maindir}/tests/test.sh
-    ${maindir}/tests/test.sh >${FSTDOUT} 2>${FSTDERR}
-    assertSame "qatestdir() returns the test directory" "${maindir}/tests" "$(cat ${FSTDOUT})"
+    fakeProjectDir "${project_dir}"
+    cat ${HEADER} > ${project_dir}/tests/test.sh && chmod +x ${project_dir}/tests/test.sh
+    echo "echo \$(qatestdir)" >> ${project_dir}/tests/test.sh
+    ${project_dir}/tests/test.sh >${FSTDOUT} 2>${FSTDERR}
+    assertSame "qatestdir() returns the test directory" "${project_dir}/tests" "$(cat ${FSTDOUT})"
 }
 
 testHeaderLibDirFunctionShouldReturnTheRealPathOfTheMainLibDirectory()
 {
-    local maindir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
 
-    ${SSHUNIT2} -p "${maindir}" &> /dev/null
-    cat ${HEADER} > ${maindir}/tests/test.sh && chmod +x ${maindir}/tests/test.sh
-    echo "echo \$(libdir)" >> ${maindir}/tests/test.sh
-    ${maindir}/tests/test.sh >${FSTDOUT} 2>${FSTDERR}
-    assertSame "libdir() returns the main lib directory" "${maindir}/lib" "$(cat ${FSTDOUT})"
+    fakeProjectDir "${project_dir}"
+    cat ${HEADER} > ${project_dir}/tests/test.sh && chmod +x ${project_dir}/tests/test.sh
+    echo "echo \$(libdir)" >> ${project_dir}/tests/test.sh
+    ${project_dir}/tests/test.sh >${FSTDOUT} 2>${FSTDERR}
+    assertSame "libdir() returns the main lib directory" "${project_dir}/lib" "$(cat ${FSTDOUT})"
 }
 
 ###### Setup / Teardown #####

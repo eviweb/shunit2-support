@@ -14,12 +14,12 @@ fi
 ################ Unit tests ################
 testFooterTemplateFindShunit2ShouldFindShunit2Library()
 {
-    target_dir="${HOME}/myproject"
-    test_dir="${target_dir}/tests"
+    project_dir="${HOME}/myproject"
+    test_dir="${project_dir}/tests"
     test_file="${test_dir}/test.sh"
-    ${SSHUNIT2} -p "${target_dir}" &> /dev/null
+    fakeProjectDir "${project_dir}"
     mkdir -p "${test_dir}"
-    cd "${target_dir}"    
+    cd "${project_dir}"    
     cat ${FOOTER} > "${test_file}" && chmod +x "${test_file}"
     sed -i "s/^.*source\/2.1\/src\/shunit2/echo \$path/" "${test_file}"
     "${test_file}" >${FSTDOUT} 2>${FSTDERR}
@@ -28,12 +28,12 @@ testFooterTemplateFindShunit2ShouldFindShunit2Library()
 
 testFooterTemplateFindShunit2ShouldFindShunit2LibraryEvenInDeepSubfolder()
 {
-    target_dir="${HOME}/myproject"
-    test_dir="${target_dir}/tests/subfolder"
+    project_dir="${HOME}/myproject"
+    test_dir="${project_dir}/tests/subfolder"
     test_file="${test_dir}/test.sh"
-    ${SSHUNIT2} -p "${target_dir}" &> /dev/null
+    fakeProjectDir "${project_dir}"
     mkdir -p "${test_dir}"
-    cd "${target_dir}"    
+    cd "${project_dir}"    
     cat ${FOOTER} > "${test_file}" && chmod +x "${test_file}"
     sed -i "s/^.*source\/2.1\/src\/shunit2/echo \$path/" "${test_file}"
     "${test_file}" >${FSTDOUT} 2>${FSTDERR}
@@ -43,11 +43,11 @@ testFooterTemplateFindShunit2ShouldFindShunit2LibraryEvenInDeepSubfolder()
 testFooterTemplateFindShunit2ShouldThrowAnErrorIfShunit2LibraryIsNotFound()
 {
     expected_message="Error Shunit2 not found !"
-    target_dir="${HOME}/myproject"
-    test_dir="${target_dir}/tests/"
+    project_dir="${HOME}/myproject"
+    test_dir="${project_dir}/tests/"
     test_file="${test_dir}/test.sh"
     mkdir -p "${test_dir}"
-    cd "${target_dir}"    
+    cd "${project_dir}"    
     cat ${FOOTER} > "${test_file}" && chmod +x "${test_file}"
 #    sed -i "s/^.*source\/2.1\/src\/shunit2/echo \$path/" "${test_file}"
     "${test_file}" >${FSTDOUT} 2>${FSTDERR}

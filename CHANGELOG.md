@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 #### Fixed
 - apply template updates only when needed
+- improve testing performance
 
 #### Added
 - new fakeProjectDir function in test lib to speed up testing
