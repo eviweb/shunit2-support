@@ -37,7 +37,7 @@ srcdir()
 }
 
 # get the path of the test directory
-testdir()
+qatestdir()
 {
     echo "$(maindir)/tests"
 }
@@ -48,7 +48,8 @@ libdir()
     echo "$(maindir)/lib"
 }
 
-################ Unit tests ################
+############## End Utilities ###############
+
 
 
 
@@ -80,4 +81,5 @@ if [ ${code} -ne 0 ]; then
     exitOnError ${code} "${path}"
 fi
 . "${path}"/source/2.1/src/shunit2
-## version: {{version}}
+#
+# version: {{version}}
