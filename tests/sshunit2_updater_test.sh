@@ -58,6 +58,18 @@ testSshunit2ShouldNotUpdateCurrentVersionTestFile()
     assertSame "no changes should have been applied" "${originfile}" "$(cat ${maindir}/tests/vcurrent_test.sh)"
 }
 
+testSshunit2ShouldOnlyApplyNeededUpdates()
+{
+    local maindir="${HOME}/myproject"
+    local curversion="$(cat ${MAINDIR}/VERSION)"
+    local expected="$(cat ${TESTDIR}/fixtures/vcurrent_test.sh | sed s/{{version}}/$curversion/)"
+
+    ${SSHUNIT2} -p "${maindir}" &> /dev/null
+    cp "${TESTDIR}/fixtures/v0.2.0_test.sh" "${maindir}/tests/dummy_test.sh"
+    ${SSHUNIT2} -U "${maindir}/tests/dummy_test.sh"
+    assertSame "only version should have been updated" "${expected}" "$(cat ${maindir}/tests/dummy_test.sh)"
+}
+
 testSshunit2ShouldUpdateAnOldTestSuite()
 {
     local maindir="${HOME}/myproject"

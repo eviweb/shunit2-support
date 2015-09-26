@@ -122,6 +122,27 @@ enableShunit2Support()
     git submodule add --name shunit2 https://github.com/kward/shunit2.git lib/shunit2
 }
 
+getUpdateVersion()
+{
+    local file="${1##*/}"
+    local version="${file%%_*}"
+
+    echo "${version#v}"
+}
+
+shouldApplyUpdate()
+{
+    local last="$1"
+    local prev="$2"
+    local ret=1
+
+    if [ "$(compareVersion ${last} ${prev})" == "1" ]; then
+        ret=0
+    fi
+
+    return $ret
+}
+
 updateTests()
 {
     local files=()
@@ -136,10 +157,12 @@ updateTests()
     for file in ${files[@]}; do        
         local oldversion="$(getVersionFromFile ${file})"
 
-        if [ $(compareVersion "${curversion}" "${oldversion}") -eq 1 ]; then
+        if shouldApplyUpdate "${curversion}" "${oldversion}"; then
             for upd in ${UPDDIR}/*; do
-                . ${upd}
-                update "${file}"
+                if shouldApplyUpdate "$(getUpdateVersion ${upd})" "${oldversion}"; then
+                    . ${upd}
+                    update "${file}"
+                fi
             done
             tagWithVersion "${file}"
         fi
@@ -180,7 +203,13 @@ doUpdate()
 
 tagWithVersion()
 {
-    echo -e "\n# version: $(cat ${MAINDIR}/VERSION)" >> "$1"
+    local version="$(cat ${MAINDIR}/VERSION)"
+
+    if grep -Poe '^# version: [0-9.]*' "$1" &> /dev/null; then
+        sed -i "s/# version: [0-9.]*/# version: $version/" "$1"
+    else
+        echo -e "\n# version: ${version}" >> "$1"
+    fi
 }
 
 compareVersion()

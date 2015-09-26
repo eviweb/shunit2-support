@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### [Unreleased][unreleased]
 
+#### Fixed
+- apply template updates only when needed
+
 ### 0.2.1 - 2015-09-25
 #### Added
 - new `-l` option to create library files under ./src
