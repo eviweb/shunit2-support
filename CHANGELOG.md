@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Fixed
 - apply template updates only when needed
 
+#### Added
+- new fakeProjectDir function in test lib to speed up testing
+
 ### 0.2.1 - 2015-09-25
 #### Added
 - new `-l` option to create library files under ./src

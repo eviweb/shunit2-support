@@ -49,3 +49,18 @@ initOutputs()
     echo > "${FSTDERR}"
     echo > "${FSTDOUT}"
 }
+
+# fake project directory
+# @param string $1 project directory path
+fakeProjectDir()
+{
+    local shunit2_src="lib/shunit2/source/2.1/src"
+    local shunit2_mod='
+[submodule "shunit2"]
+    path = lib/shunit2
+    url = https://github.com/kward/shunit2.git
+'
+    mkdir -p $1/{${shunit2_src},src,tests}
+    touch $1/${shunit2_src}/shunit2
+    echo "${shunit2_mod}" > $1/.gitmodules
+}
