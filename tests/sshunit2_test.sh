@@ -23,18 +23,18 @@ testSshunit2ShouldCreateAProjectStructure()
 
 testSshunit2ShouldComplainIfATargetDirectoryAlreadyExists()
 {
-    expected_message="The target directory already exists"
+    local expected_message="The target directory already exists"
     project_dir="${HOME}/myproject"
     mkdir -p "${project_dir}"
     ${SSHUNIT2} -p "${project_dir}" >${FSTDOUT} 2>${FSTDERR}
-    exit_code=$?
+    local exit_code=$?
     assertFalse "the script should exit with code 1" ${exit_code}
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }
 
 testSshunit2ShouldEnableShunit2SupportInANonGitDirectory()
 {
-    project_dir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     mkdir -p "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -i >${FSTDOUT} 2>${FSTDERR}
@@ -45,7 +45,7 @@ testSshunit2ShouldEnableShunit2SupportInANonGitDirectory()
 
 testSshunit2ShouldEnableShunit2SupportInAGitDirectory()
 {
-    project_dir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     mkdir -p "${project_dir}"
     cd "${project_dir}"
     git init -q
@@ -57,7 +57,7 @@ testSshunit2ShouldEnableShunit2SupportInAGitDirectory()
 
 testSshunit2ShouldCreateATestFile()
 {
-    project_dir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -t "cmd"
@@ -67,7 +67,7 @@ testSshunit2ShouldCreateATestFile()
 
 testSshunit2ShouldCreateATestFileInSubfolder()
 {
-    project_dir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -t "folder/cmd"
@@ -77,7 +77,7 @@ testSshunit2ShouldCreateATestFileInSubfolder()
 
 testSshunit2ShouldCreateALibFile()
 {
-    project_dir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -l "folder/mylib"
@@ -87,7 +87,7 @@ testSshunit2ShouldCreateALibFile()
 
 testSshunit2ShouldCreateACommandFile()
 {
-    project_dir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -c "folder/mycmd"
@@ -97,7 +97,7 @@ testSshunit2ShouldCreateACommandFile()
 
 testEnsureGeneratedCommandAndLibFilesGetTheBashShebang()
 {
-    project_dir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -l "mylib"
@@ -108,52 +108,52 @@ testEnsureGeneratedCommandAndLibFilesGetTheBashShebang()
 
 testSshunit2ShouldDieIfALibFileAlreadyExists()
 {
-    expected_message="The file already exists, abort."
-    project_dir="${HOME}/myproject"
+    local expected_message="The file already exists, abort."
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     touch "src/mylib.sh"
     ${SSHUNIT2} -l "mylib" >${FSTDOUT} 2>${FSTDERR}
-    exit_code=$?
+    local exit_code=$?
     assertFalse "the script should exit with code 1" ${exit_code}
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }
 
 testSshunit2ShouldDieIfACommandFileAlreadyExists()
 {
-    expected_message="The file already exists, abort."
-    project_dir="${HOME}/myproject"
+    local expected_message="The file already exists, abort."
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     touch "src/mycmd.sh"
     ${SSHUNIT2} -l "mycmd" >${FSTDOUT} 2>${FSTDERR}
-    exit_code=$?
+    local exit_code=$?
     assertFalse "the script should exit with code 1" ${exit_code}
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }
 
 testTheTestFileIsBuiltFromTemplates()
 {
-    header=$(cat "${MAINDIR}/src/templates/header.tpl")
-    footer=$(cat "${MAINDIR}/src/templates/footer.tpl")
+    local header=$(cat "${MAINDIR}/src/templates/header.tpl")
+    local footer=$(cat "${MAINDIR}/src/templates/footer.tpl")
 
-    project_dir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -t "cmd"
-    test_file=$(cat ${project_dir}/tests/cmd_test.sh)
+    local test_file=$(cat ${project_dir}/tests/cmd_test.sh)
     assertTrue "the test file contains the header part" "[[ '${test_file}' =~ '${header}' ]]"
     assertTrue "the test file contains the footer part" "[[ '${test_file}' =~ '${footer}' ]]"
 }
 
 testSshunit2ShouldCreateATestSuite()
 {
-    suite=$(cat "${MAINDIR}/src/templates/suite.tpl")
-    project_dir="${HOME}/myproject"
+    local suite=$(cat "${MAINDIR}/src/templates/suite.tpl")
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -s
-    suite_file="${project_dir}/tests/testsuite.sh"
+    local suite_file="${project_dir}/tests/testsuite.sh"
     assertTrue "the test suite was generated" "[ -e ${suite_file} ]"
     assertTrue "the test suite is executable" "[ -x ${suite_file} ]"
     assertTrue "the test suite is made using the suite template" "[[ '$(cat ${suite_file})' =~ '${suite}' ]]"
@@ -161,45 +161,45 @@ testSshunit2ShouldCreateATestSuite()
 
 testSshunit2ShouldInformUserIfATestSuiteAlreadyExists()
 {
-    expected_message="A test suite runner already exists"
-    project_dir="${HOME}/myproject"
+    local expected_message="A test suite runner already exists"
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     touch "${project_dir}/tests/testsuite.sh"
     cd "${project_dir}"
     ${SSHUNIT2} -s >${FSTDOUT} 2>${FSTDERR}
-    exit_code=$?
+    local exit_code=$?
     assertEquals "the script should exit with code 1" 1 ${exit_code}
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }
 
 testSshunit2ShouldTagTestFilesWithCurrentVersion()
 {
-    project_dir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -t "cmd"
-    version="$(cat ${MAINDIR}/VERSION)"
+    local version="$(cat ${MAINDIR}/VERSION)"
     assertTrue "test file is tagged with current version" "grep -Poe '^# version: ${version}' ${project_dir}/tests/cmd_test.sh"
 }
 
 testSshunit2ShouldTagTestSuiteWithCurrentVersion()
 {
-    project_dir="${HOME}/myproject"
+    local project_dir="${HOME}/myproject"
     fakeProjectDir "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -s
-    version="$(cat ${MAINDIR}/VERSION)"
+    local version="$(cat ${MAINDIR}/VERSION)"
     assertTrue "test suite is tagged with current version" "grep -Poe '^# version: ${version}' ${project_dir}/tests/testsuite.sh"
 }
 
 testSshunit2ShouldComplainIfTheCurrentDirectoryHasNotShunit2Enabled()
 {
-    expected_message="Shunit2 support is not enabled in the current directory"
-    project_dir="${HOME}/myproject"
+    local expected_message="Shunit2 support is not enabled in the current directory"
+    local project_dir="${HOME}/myproject"
     mkdir -p "${project_dir}"
     cd "${project_dir}"
     ${SSHUNIT2} -t "cmd" >${FSTDOUT} 2>${FSTDERR}
-    exit_code=$?
+    local exit_code=$?
     assertFalse "the script should exit with code 1" ${exit_code}
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }

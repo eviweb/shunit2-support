@@ -15,13 +15,13 @@ fi
 testSuiteShouldSucceedByDefault()
 {
     runTestSuite
-    exit_code=$?
+    local exit_code=$?
     assertEquals "default exit code should be 0" 0 ${exit_code}
 }
 
 testSuiteShouldFindAndRunATest()
 {
-    test1=$(newSuccessfulTest "test1")
+    local test1=$(newSuccessfulTest "test1")
     runTestSuite
     assertTrue "test was run and succeed" "[[ '$(cat ${FSTDOUT})' =~ 'testPassed' ]]"
     assertEquals "test filename is displayed" "${test1}" $(grep -o "${test1}" "${FSTDOUT}")
@@ -29,8 +29,8 @@ testSuiteShouldFindAndRunATest()
 
 testSuiteShouldFindRecursivelyAndRunManyTests()
 {
-    test1=$(newSuccessfulTest "test1")
-    test2=$(newSuccessfulTest "folder/test2")
+    local test1=$(newSuccessfulTest "test1")
+    local test2=$(newSuccessfulTest "folder/test2")
     runTestSuite
     assertTrue "test was run and succeed" "[[ '$(cat ${FSTDOUT})' =~ 'testPassed' ]]"
     assertEquals "first test filename is displayed" "${test1}" $(grep -o "${test1}" "${FSTDOUT}")
@@ -39,11 +39,11 @@ testSuiteShouldFindRecursivelyAndRunManyTests()
 
 testSuiteShouldSucceedWhenAllTestsSucceed()
 {
-    test1=$(newSuccessfulTest "test1")
-    test2=$(newSuccessfulTest "test2")
-    test3=$(newSuccessfulTest "test3")
+    local test1=$(newSuccessfulTest "test1")
+    local test2=$(newSuccessfulTest "test2")
+    local test3=$(newSuccessfulTest "test3")
     runTestSuite
-    exit_code=$?
+    local exit_code=$?
     assertEquals "default exit code should be 0" 0 ${exit_code}
     assertTrue "test suite should indicate all tests passed" "[[ '$(cat ${FSTDOUT})' =~ 'Test Suite PASSED' ]]"
     assertNull "unexpected error output" "$(cat ${FSTDERR})"
@@ -51,36 +51,36 @@ testSuiteShouldSucceedWhenAllTestsSucceed()
 
 testSuiteShouldFailWhenAtLeastOneTestFails()
 {
-    test1=$(newSuccessfulTest "test1")
-    test2=$(newFailureTest "test2")
-    test3=$(newSuccessfulTest "test3")
+    local test1=$(newSuccessfulTest "test1")
+    local test2=$(newFailureTest "test2")
+    local test3=$(newSuccessfulTest "test3")
     runTestSuite
-    exit_code=$?
+    local exit_code=$?
     assertEquals "default exit code should be 1" 1 ${exit_code}
     assertTrue "test suite should indicate at least one test failed" "[[ '$(cat ${FSTDERR})' =~ 'Test Suite FAILED' ]]"
 }
 
 testSuiteShouldDisplayTheNumberOfFailures()
 {
-    test1=$(newSuccessfulTest "test1")
-    test2=$(newFailureTest "test2")
-    test3=$(newFailureTest "test3")
+    local test1=$(newSuccessfulTest "test1")
+    local test2=$(newFailureTest "test2")
+    local test3=$(newFailureTest "test3")
     runTestSuite
     assertTrue "number of failures should be 2" "[[ '$(cat ${FSTDERR})' =~ 'Test Suite FAILED (failures=2)' ]]"
-    test1=$(newSuccessfulTest "test1")
-    test2=$(newSuccessfulTest "test2")
-    test3=$(newFailureTest "test3")
+    local test1=$(newSuccessfulTest "test1")
+    local test2=$(newSuccessfulTest "test2")
+    local test3=$(newFailureTest "test3")
     runTestSuite
     assertTrue "number of failures should be 1" "[[ '$(cat ${FSTDERR})' =~ 'Test Suite FAILED (failures=1)' ]]"
 }
 
 testSuiteShouldCollectFailingTestFile()
 {
-    test1=$(newSuccessfulTest "test1")
-    test2=$(newFailureTest "test2")
-    test3=$(newFailureTest "test3")
+    local test1=$(newSuccessfulTest "test1")
+    local test2=$(newFailureTest "test2")
+    local test3=$(newFailureTest "test3")
     runTestSuite
-    error="$(cat ${FSTDERR})"
+    local error="$(cat ${FSTDERR})"
     assertTrue "failing test files should be collected" "[[ '${error}' =~ 'Failing Test Files' ]]"
     assertTrue "test2 should be listed" "[[ '${error}' =~ 'test2_test.sh' ]]"
     assertTrue "test3 should be listed" "[[ '${error}' =~ 'test3_test.sh' ]]"
@@ -88,7 +88,7 @@ testSuiteShouldCollectFailingTestFile()
 
 testSuiteShouldExcludeFixtureFiles()
 {
-    fixtures=$(newFailureTest "fixtures/fake")
+    local fixtures=$(newFailureTest "fixtures/fake")
     runTestSuite
     assertTrue "fixtures should not be run" "[[ '$(cat ${FSTDOUT})' =~ 'Test Suite PASSED' ]] && ! [[ '$(cat ${FSTDERR})' =~ 'fake_test.sh' ]]"
 }

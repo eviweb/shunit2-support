@@ -22,12 +22,12 @@ testInstallerCreatesABinDir()
 
 testInstallerShouldExitIfTheBinDirCreationFailed()
 {
-    expected_message="failed to create ${HOME}/bin directory, abort..."
+    local expected_message="failed to create ${HOME}/bin directory, abort..."
     chmod -w "${HOME}"
     assertTrue "${HOME} must not be writable" "[ ! -w ${HOME} ]"
     assertTrue "a bin directory already exists under ${HOME}" "[ ! -e ${HOME}/bin ]"
     ${INSTALLER} >${FSTDOUT} 2>${FSTDERR}
-    exit_code=$?
+    local exit_code=$?
     assertFalse "the script should exit with code 1" ${exit_code}
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
     chmod +w "${HOME}"
@@ -35,7 +35,7 @@ testInstallerShouldExitIfTheBinDirCreationFailed()
 
 testInstallerShouldInformAboutBashReloadIfABinDirIsCreated()
 {
-    expected_message="You will need to reload your bash environment: ie. 'exec bash -l'"
+    local expected_message="You will need to reload your bash environment: ie. 'exec bash -l'"
     assertTrue "a bin directory already exists under ${HOME}" "[ ! -e ${HOME}/bin ]"
     ${INSTALLER} >${FSTDOUT} 2>${FSTDERR}
     assertTrue "fails to create a bin directory under ${HOME}" "[ -e ${HOME}/bin ]"
@@ -62,9 +62,9 @@ testInstallerShouldInformIfAnExistingLinkDoesNotPointToSshunit2Command()
     mkdir ${HOME}/bin
     touch ${HOME}/sshunit2
     ln -s ${HOME}/sshunit2 ${HOME}/bin
-    expected_message="A symlink to ${HOME}/sshunit2 already exists, abort..."
+    local expected_message="A symlink to ${HOME}/sshunit2 already exists, abort..."
     ${INSTALLER} >${FSTDOUT} 2>${FSTDERR}
-    exit_code=$?
+    local exit_code=$?
     assertFalse "the script should exit with code 1" ${exit_code}
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }
@@ -82,9 +82,9 @@ testUninstallerMustNotDeleteALinkThatDoesNotToSshunit2Command()
     mkdir ${HOME}/bin
     touch ${HOME}/sshunit2
     ln -s ${HOME}/sshunit2 ${HOME}/bin
-    expected_message="fails to remove ${HOME}/bin/sshunit2 as it does not point to ${SSHUNIT2}, abort..."
+    local expected_message="fails to remove ${HOME}/bin/sshunit2 as it does not point to ${SSHUNIT2}, abort..."
     ${INSTALLER} -u >${FSTDOUT} 2>${FSTDERR}
-    exit_code=$?
+    local exit_code=$?
     assertFalse "the script should exit with code 1" ${exit_code}
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }
