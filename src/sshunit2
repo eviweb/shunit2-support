@@ -41,6 +41,17 @@ checkShunit2Support()
     fi
 }
 
+checkInProjectDir()
+{
+    if [ ! -e "$PWD/lib" ] || \
+       [ ! -e "$PWD/src" ] || \
+       [ ! -e "$PWD/tests" ]; then
+
+        echo "Not in project directory, abort." >&2
+        exit 1
+   fi
+}
+
 createDirectoryIfNotExist()
 {
     local dir="$1"
@@ -241,10 +252,10 @@ while getopts $OPTIONS option
 do
     case $option in
         p) newProject "$OPTARG";;
-        t) newTest "$OPTARG";;
-        s) newTestSuite;;
-        c) newCmd "$OPTARG";;
-        l) newLib "$OPTARG";;
+        t) checkInProjectDir && newTest "$OPTARG";;
+        s) checkInProjectDir && newTestSuite;;
+        c) checkInProjectDir && newCmd "$OPTARG";;
+        l) checkInProjectDir && newLib "$OPTARG";;
         i) enableShunit2Support;;
         U) doUpdate "$OPTARG";;
         *) usage && exit 1;;

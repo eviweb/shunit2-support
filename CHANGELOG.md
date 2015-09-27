@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 #### Added
 - new fakeProjectDir function in test lib to speed up testing
+- check current directory is project directory when it is required
 
 ### 0.2.1 - 2015-09-25
 #### Added

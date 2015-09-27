@@ -132,6 +132,26 @@ testSshunit2ShouldDieIfACommandFileAlreadyExists()
     assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
 }
 
+testSshunit2ShouldDieIfNotInProjectDirWhenItIsRequired()
+{
+    local expected_message="Not in project directory, abort."
+    local project_dir="${HOME}/myproject"
+    fakeProjectDir "${project_dir}"
+    cd "${HOME}"
+    #
+    assertFalse "the script should exit with code 1" "${SSHUNIT2} -t cmd >${FSTDOUT} 2>${FSTDERR}"
+    assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
+    #
+    assertFalse "the script should exit with code 1" "${SSHUNIT2} -l mylib >${FSTDOUT} 2>${FSTDERR}"
+    assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
+    #
+    assertFalse "the script should exit with code 1" "${SSHUNIT2} -c mycmd >${FSTDOUT} 2>${FSTDERR}"
+    assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
+    #
+    assertFalse "the script should exit with code 1" "${SSHUNIT2} -s >${FSTDOUT} 2>${FSTDERR}"
+    assertSame "the following message should be displayed: ${expected_message}" "${expected_message}" "$(cat ${FSTDERR})"
+}
+
 testTheTestFileIsBuiltFromTemplates()
 {
     local header=$(cat "${MAINDIR}/src/templates/header.tpl")
@@ -196,7 +216,7 @@ testSshunit2ShouldComplainIfTheCurrentDirectoryHasNotShunit2Enabled()
 {
     local expected_message="Shunit2 support is not enabled in the current directory"
     local project_dir="${HOME}/myproject"
-    mkdir -p "${project_dir}"
+    mkdir -p ${project_dir}/{lib,src,tests}
     cd "${project_dir}"
     ${SSHUNIT2} -t "cmd" >${FSTDOUT} 2>${FSTDERR}
     local exit_code=$?

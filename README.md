@@ -40,6 +40,8 @@ run `sshunit2 -l filename`
 ### generate a test suite runner under _./tests_ directory
 run `sshunit2 -s`    
 
+> _Please note that the current directory must be your project directory_   
+
 ### update old unit test and test suite files with new version templates
 run `sshunit2 -U file_or_dir`    
 
