@@ -13,41 +13,20 @@ _this will create a link to the `shunit2-support/src/sshunit2` command in your `
 
 **To remove the `sshunit2` command:** run the installer with the `-u` flag: `shunit2-support/install.sh -u`   
 
-The command
------------
-### create a new project with shunit2 support enabled
-run `sshunit2 -p /path/to/project`    
-### generate a unit test file for a given command
-run `sshunit2 -t command_name`    
+Usage
+-----
+* `sshunit2 -p /path/to/project`: create a new project with shunit2 support enabled
+* `sshunit2 -t command_name` (*): generate a unit test file for a given command
+* `sshunit2 -i`: enable shunit2 support in the current directory
+* `sshunit2 -c filename` (*): create a command file relatively under `./src`
+* `sshunit2 -l filename` (*): create a library file relatively under `./src`
+* `sshunit2 -s` (*): generate a test suite runner under `./tests`
+* `sshunit2 -U file_or_dir`: update old unit test and test suite files with new version templates
+* `sshunit2 -h`: display the help message  
 
-> _Please note that the current directory must be your project directory_   
-
-### enable shunit2 support in an existing project directory
-run `sshunit2 -i`    
-
-> _Please note that the current directory must be your project directory_   
-
-### create a command file relatively under ./src
-run `sshunit2 -c filename`    
-
-> _Please note that the current directory must be your project directory_    
-
-### create a library file relatively under ./src
-run `sshunit2 -l filename`    
-
-> _Please note that the current directory must be your project directory_   
-
-### generate a test suite runner under _./tests_ directory
-run `sshunit2 -s`    
-
-> _Please note that the current directory must be your project directory_   
-
-### update old unit test and test suite files with new version templates
-run `sshunit2 -U file_or_dir`    
-
-### display the help message
-run `sshunit2 -h`    
+> _(*) Please note that these command calls must be run from within your project directory_   
+  
 
 License
 -------
-please see [LICENSE](/LICENSE)
+this project is licensed under the terms of the [MIT License](/LICENSE)

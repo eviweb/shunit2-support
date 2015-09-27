@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### [Unreleased][unreleased]
 
+#### Changed
+- refactor README file
+
 #### Fixed
 - apply template updates only when needed
 - improve testing performance
