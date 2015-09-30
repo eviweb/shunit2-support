@@ -2,6 +2,10 @@ Shunit2 Support
 ===============
 this little lib aims to help in managing [shunit2](https://github.com/kward/shunit2) in your project.    
 
+##### Health status
+[![Travis CI - Build Status](https://travis-ci.org/eviweb/shunit2-support.svg)](https://travis-ci.org/eviweb/shunit2-support)
+[![Github - Last tag](https://img.shields.io/github/tag/eviweb/shunit2-support.svg)](https://github.com/eviweb/shunit2-support/tags)
+
 Installation
 ------------
 * clone this repository `git clone --recursive https://github.com/eviweb/shunit2-support.git`
