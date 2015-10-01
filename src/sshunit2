@@ -101,7 +101,7 @@ newTestSuite()
 
 toDevFilename()
 {
-    echo "src/${1%.*}.sh"
+    echo "src/$1.sh"
 }
 
 newLib()

@@ -106,6 +106,20 @@ testEnsureGeneratedCommandAndLibFilesGetTheBashShebang()
     assertTrue "the command file has the bash shebang" "grep '#! /bin/bash' ${project_dir}/src/mycmd.sh"
 }
 
+# fix issue #1
+testCommandOrLibFileNameShouldContainDots()
+{
+    local project_dir="${HOME}/myproject"
+    local cmd="my.dotted.cmd"
+    local lib="my.dotted.lib"
+    fakeProjectDir "${project_dir}"
+    cd "${project_dir}"
+    ${SSHUNIT2} -l "${lib}"
+    ${SSHUNIT2} -c "${cmd}"
+    assertTrue "the library file exists" "[ -e ${project_dir}/src/${lib}.sh ]"
+    assertTrue "the command file exists" "[ -e ${project_dir}/src/${cmd}.sh ]"
+}
+
 testSshunit2ShouldDieIfALibFileAlreadyExists()
 {
     local expected_message="The file already exists, abort."
